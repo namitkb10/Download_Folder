@@ -1,0 +1,17 @@
+1.1. Purpose
+
+To document the lifecycle stages of testing at a high level, explaining what type of testing will be
+carried out along with indicative entry and exit ciiteria for each testing stage; this wil avoid any un-
+
+necessary duplication of testing
+
+To assure external departments and compar
+‘adopted by the project
+
+To indicate the projects adherence to the testing principles and standards
+
+To identify any inital risks to be addressed by testing and any residual risks which will remain as a
+results of any tests recommended but not executed
+
+that a structured approach to testing has been
+

@@ -1,0 +1,37 @@
+Deployment in Kubernetes Cluster
+---------------------------------
+project location >>  kubectl get all //It will display the status of all kubernetes cluster
+
+reach-out to your project location >> helm create demochartName 		//Creating helm chart in project location along with multiple .yaml files
+
+project location >> ls (It will display demochartName along with other folder)
+
+Inside demochartName folder (It creates multiple files)
+
+demochartName/
+├── .helmignore   	# Contains patterns to ignore when packaging Helm charts.
+├── Chart.yaml    	# Information about your chart
+├── charts/       	# Charts that this chart depends on
+└── templates/    	# The template files
+|	└── tests/    	# The test files
+|	├── deployment.yaml 
+|
+|__	values.yaml   # The default values for your templates
+
+
+update the Chart.yaml, values.yaml & deployment.yaml files as per the requirements
+// In values.yaml files, update the image.repository URL
+
+project location >> helm template templateName(demoChartName) // It will display parameter value into actual value
+
+project location >>  helm lint templateName(demochartName) //compile the helm chart code, if there is any error will display here with details
+
+project location >>  helm install releaseName --debug --dry-run demoChartName  // Use the following --dry-run command to verify your demoChartName helm chart
+
+project location >>  helm install releaseName demoChartName
+
+project location >>  helm list -a // list down all the releases
+
+Now run again
+
+project location >>  kubectl get all //It will display the status of all the kubernetes cluster running/stopped (Verify your deployment here)

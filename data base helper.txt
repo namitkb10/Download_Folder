@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Text;
+
+namespace LeretaDTSAutomation.Framework
+{
+    public static class DataBaseHelpers
+    {
+        // Open the connection
+        public static SqlConnection DBConnect(this SqlConnection sqlConnection, string connectionString)
+        {
+            try
+            {
+                sqlConnection = new SqlConnection(connectionString);
+                sqlConnection.Open();
+                return sqlConnection;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format(e.Message));
+            }
+        }
+
+        // Closing the connection
+        public static void DBClose(this SqlConnection sqlConnection)
+        {
+            try
+            {
+                sqlConnection.Close();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format(e.Message));
+            }
+        }
+
+        // Execution
+        public static void ExecuteQuery(this SqlConnection sqlConnection, string queryString)
+        {
+            try
+            {
+                // Checking the state of the connection
+                if (sqlConnection == null || (sqlConnection != null && (sqlConnection.State == ConnectionState.Closed ||
+                    sqlConnection.State == ConnectionState.Broken)))
+                {
+                    sqlConnection.Open();
+                }
+
+                // Execute Query
+                SqlCommand sqlCommand = new SqlCommand(queryString, sqlConnection);
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format(e.Message));
+            }
+        }
+
+        // Execute Query and Data Reader
+        public static SqlDataReader ExecuteReader(this SqlConnection sqlConnection, CommandType type, string cmdText, params SqlParameter[] parameters)
+        {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            try
+            {
+                command = new SqlCommand(cmdText, sqlConnection);
+                command.CommandType = type;
+                foreach (SqlParameter param in parameters)
+                {
+                    if ((param.Direction == (ParameterDirection)3 || param.Direction == (ParameterDirection)1) && param.Value == null)
+                    {
+                        param.Value = DBNull.Value;
+                    }
+
+                    command.Parameters.Add(param);
+                }
+
+                reader = command.ExecuteReader();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                command.Dispose();
+            }
+
+            return reader;
+        }
+    }
+}
